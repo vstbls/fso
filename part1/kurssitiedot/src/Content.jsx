@@ -1,9 +1,9 @@
+import Part from "./Part"
+
 const Content = ({parts}) => (
-    <>
-        {
-            parts.map(part => (<p key={part[2]}>{part[0]} {part[1]}</p>))
-        }
-    </>
+    <div>
+        {parts.map(part => <Part part={part} key={part.id} />)}
+    </div>
 )
 
 export default Content

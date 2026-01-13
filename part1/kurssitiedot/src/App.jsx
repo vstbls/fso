@@ -12,16 +12,16 @@ const App = () => {
   const exercises3 = 14
 
   const parts = [
-    [part1, exercises1, 1],
-    [part2, exercises2, 2],
-    [part3, exercises3, 3]
+    {title: part1, exercises: exercises1, id: 1},
+    {title: part2, exercises: exercises2, id: 2},
+    {title: part3, exercises: exercises3, id: 3},
   ]
 
   return (
     <div>
       <Header course={course} />
       <Content parts={parts} />
-      <Total exercises={parts.map(part => part[1])} />
+      <Total exercises={parts.map(part => part.exercises)} />
     </div>
   )
 }

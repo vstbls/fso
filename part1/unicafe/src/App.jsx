@@ -2,22 +2,32 @@ import { useState } from 'react'
 
 const Button = ({callback, text}) => <button onClick={callback}>{text}</button>
 
-const StatisticLine = ({text, value}) => <p>{text} {value}</p>
+const StatisticTable = ({lines}) => (
+  <table>
+    <tbody>
+      {lines.map(line => (<tr key={line.id}><td>{line.text}</td><td>{line.value}</td></tr>))}
+    </tbody>
+  </table>
+)
 
 const Statistics = ({good, neutral, bad}) => {
   const total = good+neutral+bad
 
   if (total === 0) return <p>No feedback given</p>
 
+  const lines = [
+    {text: ':)', value: good, id: 1},
+    {text: ':l', value: neutral, id: 2},
+    {text: ':(', value: bad, id: 3},
+    {text: 'Total', value: total, id: 4},
+    {text: 'Average', value: (good-bad)/total || 0, id: 5},
+    {text: 'Positive', value: (good/total*100 || 0) + ' %', id: 6}
+  ]
+
   return (
     <div>
       <h1>Stats!</h1>
-      <StatisticLine text={':)'} value={good} />
-      <StatisticLine text={':l'} value={neutral} />
-      <StatisticLine text={':('} value={bad} />
-      <StatisticLine text={'Total feedback'} value={total} />
-      <StatisticLine text={'Average'} value={(good-bad)/total || 0} />
-      <StatisticLine text={'Positive'} value={good/total*100 || 0} />
+      <StatisticTable lines={lines} />
     </div>
   )
 }

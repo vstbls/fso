@@ -4,6 +4,7 @@ import Person from './Person'
 import Filter from './Filter'
 import FormField from './FormField'
 import Notification from './Notification'
+import Error from './Error'
 
 import './index.css'
 
@@ -13,6 +14,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [phoneFilter, setPhoneFilter] = useState('')
   const [notificationMsg, setNotificationMsg] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     numberService
@@ -42,6 +44,17 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         displayNotif(`updated the number of ${updatedPerson.name} !!!!!!!!!!!!!!!!!!!!!!YES!!!!!!!!!!!!`)
+      })
+      .catch(err => {
+        setError(`${updatedPerson.name} has.... already been..removed :'(.......................`)
+        setTimeout(() => {
+          setError(null)
+        }, 5000)
+        numberService
+          .getAll()
+          .then(numbers => {
+            setPersons(numbers)
+          })
       })
   }
 
@@ -95,6 +108,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification msg={notificationMsg} />
+      <Error err={error} />
       <Filter filter={phoneFilter} handler={handleFilterChange} />
       <h2>Add entry</h2>
       <form onSubmit={addNumber}>

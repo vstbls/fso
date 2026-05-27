@@ -3,12 +3,16 @@ import numberService from './services/numbers'
 import Person from './Person'
 import Filter from './Filter'
 import FormField from './FormField'
+import Notification from './Notification'
+
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [phoneFilter, setPhoneFilter] = useState('')
+  const [notificationMsg, setNotificationMsg] = useState(null)
 
   useEffect(() => {
     numberService
@@ -17,6 +21,13 @@ const App = () => {
         setPersons(numbers)
       })
   }, [])
+
+  const displayNotif = (msg) => {
+    setNotificationMsg(msg)
+    setTimeout(() => {
+      setNotificationMsg(null)
+    }, 5000)
+  }
 
   const updateNumber = (old) => {
     const updatedPerson = {name: newName, number: newNumber, id: old.id}
@@ -30,6 +41,7 @@ const App = () => {
         )
         setNewName('')
         setNewNumber('')
+        displayNotif(`updated the number of ${updatedPerson.name} !!!!!!!!!!!!!!!!!!!!!!YES!!!!!!!!!!!!`)
       })
   }
 
@@ -49,6 +61,7 @@ const App = () => {
       .create(newPerson)
       .then(response => {
         setPersons(persons.concat(newPerson))
+        displayNotif(`SUCCEFULLY added ${newPerson.name}`)
         setNewName('')
         setNewNumber('')
       })
@@ -74,12 +87,14 @@ const App = () => {
       .remove(person.id)
       .then(response => {
         setPersons(persons.filter(p => p.id != person.id))
+        displayNotif(`We have removed succefluy${person.name} from the system.......................... `)
       })
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification msg={notificationMsg} />
       <Filter filter={phoneFilter} handler={handleFilterChange} />
       <h2>Add entry</h2>
       <form onSubmit={addNumber}>

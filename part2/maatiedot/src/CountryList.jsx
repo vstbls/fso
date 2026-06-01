@@ -1,6 +1,6 @@
 import Country from './Country'
 
-const CountryList = ({countries}) => {
+const CountryList = ({countries, setFilter}) => {
     if (countries.length === 0) {
         return (
             <p>zeeeeroooo (000000) results</p>
@@ -12,7 +12,7 @@ const CountryList = ({countries}) => {
     } else {
         return (
             <div>
-                {countries.map(country => <Country name={country} key={country} />)}
+                {countries.map(country => <Country name={country} setFilter={setFilter} key={country} />)}
             </div>
         )
     }

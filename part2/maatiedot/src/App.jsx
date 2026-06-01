@@ -34,7 +34,7 @@ const App = () => {
         ? <CountryDetails country={
           countries.filter(c => c.name.common.toLowerCase().includes(filter.toLowerCase()))[0]
         } />
-        : <CountryList countries={countryNames} />
+        : <CountryList countries={countryNames} setFilter={setFilter} />
       }
     </div>
   )

@@ -52,6 +52,36 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (!body.name) {
+        return response.status(400).json({
+            error: 'your request is missing a name Mister..'
+        })
+    }
+    if (!body.number) {
+        return response.status(400).json({
+            error: 'your request is missing a number Mister..'
+        })
+    }
+    if (ppl.find(p => p.name === body.name)) {
+        return response.status(400).json({
+            error: 'that name is already occupied Sir...'
+        })
+    }
+
+    const newPerson = {
+        id: Math.floor(Math.random() * (2**31)),
+        name: body.name,
+        number: body.number,
+    }
+
+    ppl = ppl.concat(newPerson)
+
+    response.json(newPerson)
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`SERVER RUNNING ON PORT ${PORT}`)

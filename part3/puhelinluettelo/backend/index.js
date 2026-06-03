@@ -2,12 +2,12 @@ const express = require('express')
 const morgan = require('morgan')
 
 const app = express()
+app.use(express.static('dist'))
 app.use(express.json())
 
 morgan.token('json', (req) => {
     return JSON.stringify(req.body)
 })
-
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :json'))
 
 let ppl = [
@@ -79,7 +79,7 @@ app.post('/api/persons', (request, response) => {
     }
 
     const newPerson = {
-        id: Math.floor(Math.random() * (2**31)),
+        id: String(Math.floor(Math.random() * (2**31))),
         name: body.name,
         number: body.number,
     }

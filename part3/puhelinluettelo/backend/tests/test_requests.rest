@@ -9,3 +9,17 @@ Content-Type: application/json
     "name": "Jalo Peura",
     "number": "222-222-222"
 }
+
+###
+
+POST https://fso-q8rs.onrender.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "Jalo Peura",
+    "number": "222-222-222"
+}
+
+###
+
+DELETE https://fso-q8rs.onrender.com/api/persons/1

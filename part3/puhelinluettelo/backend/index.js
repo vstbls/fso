@@ -46,14 +46,9 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    const person = ppl.find(p => p.id === id)
-
-    if (person) {
+    Person.findById(request.params.id).then(person => {
         response.json(person)
-    } else {
-        response.status(404).end()
-    }
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -82,15 +77,15 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    const newPerson = {
+    const newPerson = new Person ({
         id: String(Math.floor(Math.random() * (2**31))),
         name: body.name,
         number: body.number,
-    }
+    })
 
-    ppl = ppl.concat(newPerson)
-
-    response.json(newPerson)
+    newPerson.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 const PORT = process.env.PORT

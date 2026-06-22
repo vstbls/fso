@@ -31,6 +31,13 @@ const App = () => {
     }, 5000)
   }
 
+  const displayError = (msg) => {
+    setError(msg)
+    setTimeout(() => {
+      setError(null)
+    }, 5000)
+  }
+
   const updateNumber = (old) => {
     const updatedPerson = {name: newName, number: newNumber, id: old.id}
     numberService
@@ -46,10 +53,7 @@ const App = () => {
         displayNotif(`updated the number of ${updatedPerson.name} !!!!!!!!!!!!!!!!!!!!!!YES!!!!!!!!!!!!`)
       })
       .catch(err => {
-        setError(`${updatedPerson.name} has.... already been..removed :'(.......................`)
-        setTimeout(() => {
-          setError(null)
-        }, 5000)
+        displayError(`some error.. OCCURRED when updaing ${updatedPerson.name}????? mb refresh yr page....?`)
         numberService
           .getAll()
           .then(numbers => {
@@ -82,6 +86,10 @@ const App = () => {
         displayNotif(`SUCCEFULLY added ${responsePerson.name}`)
         setNewName('')
         setNewNumber('')
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        displayError(`the validation failed........ ${error.response.data.error}`)
       })
   }
 

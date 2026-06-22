@@ -38,7 +38,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
         .catch(err => next(err))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
 
     if (!body.name) {
@@ -51,11 +51,13 @@ app.post('/api/persons', (request, response) => {
             error: 'your request is missing a number Mister..'
         })
     }
-    if (ppl.find(p => p.name === body.name)) {
-        return response.status(400).json({
-            error: 'that name is already occupied Sir...'
-        })
-    }
+    Person.find({name: body.name}).then(res => {
+        if (res.length > 0) {
+            return response.status(400).json({
+                error: 'that name is already occupied Sir...'
+            })
+        }
+    })
 
     const newPerson = new Person ({
         id: String(Math.floor(Math.random() * (2**31))),
@@ -63,9 +65,11 @@ app.post('/api/persons', (request, response) => {
         number: body.number,
     })
 
-    newPerson.save().then(savedPerson => {
-        response.json(savedPerson)
-    })
+    newPerson.save()
+        .then(savedPerson => {
+            response.json(savedPerson)
+        })
+        .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -90,8 +94,10 @@ app.put('/api/persons/:id', (request, response, next) => {
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
 
-    if (error.name == 'CastError') {
+    if (error.name === 'CastError') {
         return response.status(400).send({error: 'malformatted id'})
+    } else if (error.name === 'ValidationError') {
+        return response.status(400).json({error: error.message})
     }
 }
 
